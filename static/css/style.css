@@ -1,0 +1,67 @@
+.rating-container {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.rating-column {
+    display: inline-block;
+    width: 30%;
+    margin: 0 1%;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+/* 默认颜色 */
+.fact .btn { background-color: #e0f2e9; }
+.style .btn { background-color: #e0f0ff; }
+.background .btn { background-color: #e8e0ff; }
+
+/* 选中状态 */
+.btn.active.positive {
+    background-color: #2ecc71 !important; /* 绿色 */
+}
+.fact .btn.active.positive { background-color: #27ae60; }
+.style .btn.active.positive { background-color: #2980b9; }
+.background .btn.active.positive { background-color: #8e44ad; }
+
+.btn.active.negative {
+    background-color: #e74c3c !important; /* 红色 */
+}
+
+.submit-btn {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.btn.cancelled {
+    background-color: #f0f0f0 !important;
+    color: #666;
+}
+.user-info {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info a {
+    margin-left: 10px;
+    color: #007bff;
+}

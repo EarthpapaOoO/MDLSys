@@ -1,0 +1,68 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('rating-form');
+    const selected = {
+        fact: null,
+        style: null,
+        background: null
+    };
+
+    // 处理按钮点击
+    document.querySelectorAll('.rating-column button').forEach(button => {
+        button.addEventListener('click', function() {
+            const dimension = this.parentElement.classList[1]; // fact/style/background
+            const value = this.dataset.value;
+            
+            // 清除同列其他按钮的选中状态
+            this.parentElement.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('active', 'positive', 'negative');
+            });
+            
+            // 标记当前选择
+            this.classList.add('active', value);
+            selected[dimension] = value;
+            if (!wasSelected) {
+                this.classList.add('active', value);
+                selected[dimension] = value;
+            } else {
+                selected[dimension] = null; // 取消选择
+            }
+        });
+    });
+
+    // 处理表单提交
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // 验证是否完成所有选择
+        if (!selected.fact || !selected.style || !selected.background) {
+            alert('请完成所有维度的评价！');
+            return;
+        }
+
+        // 构建FormData
+        const formData = new FormData(form);
+        formData.append('fact', selected.fact);
+        formData.append('style', selected.style);
+        formData.append('background', selected.background);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                },
+                body: new URLSearchParams(formData)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('评价提交成功！');
+                window.location.reload();
+            } else {
+                alert(result.error || '提交失败');
+            }
+        } catch (error) {
+            console.error('提交错误:', error);
+        }
+    });
+});
