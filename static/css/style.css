@@ -12,7 +12,7 @@
 .btn {
     display: block;
     width: 100%;
-    padding: 15px;
+    padding: 20px;
     margin: 10px 0;
     border: none;
     cursor: pointer;
@@ -41,7 +41,7 @@
     display: block;
     width: 200px;
     margin: 20px auto;
-    padding: 15px;
+    padding: 20px;
     background-color: #3498db;
     color: white;
     border: none;
@@ -64,4 +64,13 @@
 .user-info a {
     margin-left: 10px;
     color: #007bff;
+}
+.count {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.count-updated {
+    transform: scale(1.2);
+    color: #3498db;
 }

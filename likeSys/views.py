@@ -1,3 +1,4 @@
+#likeSys/views.py
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -8,8 +9,6 @@ from django.db import models
 from django.contrib.auth import authenticate, login
 from django.shortcuts import  redirect
 from django.contrib.auth.forms import AuthenticationForm
-
-User = get_user_model()
 
 def document_detail(request, doc_id):
     document = get_object_or_404(Document, id=doc_id)
@@ -23,7 +22,7 @@ def document_detail(request, doc_id):
         'document': document,
         'user_vote': user_vote
     })
-
+# views.py
 @require_http_methods(["POST"])
 @transaction.atomic
 def submit_rating(request, doc_id):
@@ -31,55 +30,53 @@ def submit_rating(request, doc_id):
     if not request.user.is_authenticated:
         return JsonResponse({'error': '请先登录'}, status=403)
 
+    # 参数解析（允许空值处理）
+    def parse_choice(value):
+        return {'positive': True, 'negative': False}.get(value, None)
+    
+    data = {
+        'fact': request.POST.get('fact'),
+        'style': request.POST.get('style'),
+        'background': request.POST.get('background')
+    }
 
-    # 获取参数
-    data = request.POST
-    required_fields = ['fact', 'style', 'background']
-    if not all(field in data for field in required_fields):
+    # 验证必须完成所有选择
+    if any(v is None for v in data.values()):
         return JsonResponse({'error': '请完成所有维度的评价'}, status=400)
 
-    # # 解析选择
-    #  # 解析选择（新增null处理）
-    # def parse_choice(value):
-    #     return {'positive': True, 'negative': False}.get(value, None)
-
-    fact_choice = data['fact'] == 'positive'
-    style_choice = data['style'] == 'positive'
-    background_choice = data['background'] == 'positive'
-
-# # 删除原有评价（如果有维度取消选择）
-#     if any(choice is None for choice in [fact_choice, style_choice]):
-#         Vote_Document.objects.filter(
-#             user=request.user,
-#             document=document
-#         ).delete()
-#         return JsonResponse({'success': True})
-    # 创建或更新评价
+    # 获取或创建评价记录
     vote, created = Vote_Document.objects.update_or_create(
         user=request.user,
         document=document,
         defaults={
-            'fact_choice': fact_choice,
-            'style_choice': style_choice,
-            'background_choice': background_choice
+            'fact_choice': parse_choice(data['fact']),
+            'style_choice': parse_choice(data['style']),
+            'background_choice': parse_choice(data['background'])
+            
         }
     )
+    # document.refresh_from_db()
 
-    # 更新文档统计（需优化为信号处理）
-    def update_counter(field, is_positive):
-        if is_positive:
-            Document.objects.filter(id=document.id).update(
-                **{f"{field}_positive": models.F(f"{field}_positive") + 1}
-            )
-        else:
-            Document.objects.filter(id=document.id).update(
-                **{f"{field}_negative": models.F(f"{field}_negative") + 1}
-            )
-
-    # 这里需要处理旧值的影响（实际项目建议使用信号）
-    update_counter('fact', fact_choice)
-    update_counter('style', style_choice)
-    update_counter('background', background_choice)
-
-    return JsonResponse({'success': True})
-
+    stats = {
+        'fact': {
+            'positive': Vote_Document.objects.filter(document=document, fact_choice=True).count(),
+            'negative': Vote_Document.objects.filter(document=document, fact_choice=False).count()
+        },
+        'style': {
+            'positive': Vote_Document.objects.filter(document=document, style_choice=True).count(),
+            'negative': Vote_Document.objects.filter(document=document, style_choice=False).count()
+        },
+        'background': {
+            'positive': Vote_Document.objects.filter(document=document, background_choice=True).count(),
+            'negative': Vote_Document.objects.filter(document=document, background_choice=False).count()
+        },
+    }
+    return JsonResponse({
+        'success': True,
+        'stats':stats,
+        'new_vote': {  # 新增当前用户的最新选择
+            'fact': vote.fact_choice,
+            'style': vote.style_choice,
+            'background': vote.background_choice
+            } 
+ })  # 统计更新交给信号处理

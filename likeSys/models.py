@@ -58,6 +58,17 @@ class Vote_Document(models.Model):
     background_choice = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        """ 保存前记录旧值 """
+        if self.pk:  # 仅限更新操作
+            old_instance = Vote_Document.objects.get(pk=self.pk)
+            self._old_values = {
+                'fact': old_instance.fact_choice,
+                'style': old_instance.style_choice,
+                'background': old_instance.background_choice
+            }
+        super().save(*args, **kwargs)
+
     class Meta:
         unique_together = ('user', 'document')  # 确保唯一评价
 
