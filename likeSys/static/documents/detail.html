@@ -1,17 +1,4 @@
-<script>
-    // 初始化用户当前选择
-    const INITIAL_SELECTION = {
-        {% if user_vote %}
-        fact: '{{ user_vote.fact_choice|yesno:"positive,negative" }}',
-        style: '{{ user_vote.style_choice|yesno:"positive,negative" }}',
-        background: '{{ user_vote.background_choice|yesno:"positive,negative" }}'
-        {% else %}
-        fact: null,
-        style: null,
-        background: null
-        {% endif %}
-    };
-</script>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +20,8 @@
     <div class="rating-container">
         <form id="rating-form" method="post" action="{% url 'submit_rating' document.id %}">
             {% csrf_token %}
+             <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
+
             <div class="rating-column fact">
                 <button type="button" data-dimension="fact" data-value="positive"
                     class="btn {% if user_vote and user_vote.fact_choice %}active positive{% endif %}">✓ 事实积极</button>
@@ -46,6 +35,7 @@
                         </div>
             </div>
             
+            
          <div class="rating-column style">
             <button type="button" data-dimension="style" data-value="positive"
                 class="btn {% if user_vote and user_vote.style_choice %}active positive{% endif %}">✓ 文风积极</button>
@@ -58,6 +48,8 @@
                 <span class="negative-count">{{ document.style_negative }}</span>
             </div>
         </div>
+
+
 
         <div class="rating-column background">
             <button type="button" data-dimension="background" data-value="positive"
@@ -76,6 +68,7 @@
         </form>
     </div>
 <!-- js here -->
+ 
     <script src="/static/js/script.js"></script>
 </body>
 </html>

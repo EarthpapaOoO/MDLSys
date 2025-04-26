@@ -1,14 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth import get_user_model
 import uuid
 from django.conf import settings
 def user_directory_path(instance, filename):
     # 文件将上传到 MEDIA_ROOT/user_<id>/<filename>
     return f'user_{instance.user.id}/{filename}'
-
-# User = get_user_model()
-
 
 
 class CustomUser(AbstractUser):
@@ -18,8 +14,8 @@ class CustomUser(AbstractUser):
     related_name='customuser_set',
     blank=True,
     verbose_name='groups',
-)
     help_text='The groups this user belongs to. A user will get allpermissions granted to each of their groups.',
+)
     user_permissions = models.ManyToManyField(
     'auth.Permission',
     related_name='customuser_set',
