@@ -452,7 +452,7 @@ def submit_rating(request, doc_id):
 #### **3.1.3 URL 配置 (urls.py)**
 
 需要为上述视图配置 URL。
-# 项目级urls.py
+##### 项目级urls.py
 ```python
 from django.contrib import admin
 from django.urls import path,include
@@ -477,11 +477,11 @@ path('likeSys/',include('likeSys.urls')),
 * 引入likeSys路由,挂载应用
 
 ```python
-  # ⭐ 加上这一行，确保 media 文件可以被访问
+  ##### ⭐ 加上这一行，确保 media 文件可以被访问
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
 
-# documents/urls.py (或者你的应用级 urls.py)  
+#### documents/urls.py (或者你的应用级 urls.py)  
 
 ```python
 # likeSys/urls.py
@@ -711,6 +711,8 @@ function updateStatsDisplay(stats) {
 
 ```
 
+**以下是代码摘要和分析**
+
 
 ```javascript
 document.addEventListener('DOMContentLoaded', function() {...
@@ -839,7 +841,7 @@ if (result.success) {
     将从服务器接收到的用户最新投票数据 `(result.new_vote)` 传递给它
     用于更新按钮的高亮状态以反映已提交的投票 
     * 更新提交按钮状态为“已提交”并禁用
-    * 更新隐藏输入框 \#vote-submitted 的值为 'true'
+    * 更新隐藏输入框 #vote-submitted 的值为 'true'
   * **处理响应 (失败):** 如果 `result.success` 为 `false` 或 `Workspace 出错`：  
     * 显示包含错误信息的 alert (优先使用 result.error，否则显示通用错误信息)
     * 将提交按钮重置回“确认评价”状态并启用
@@ -856,7 +858,7 @@ function refreshVoteStatus(new_vote) {...
   * 清除所有评分按钮的 `active`, `positive`, `negative` 类。  
   * 遍历 `new_vote` 对象
   * 对于每个维度 (`dim`) 和对应的选择 (choice - true/false)，确定值是 'positive' 还是 'negative'。  
-  * 找到对应的按钮（例如，.fact button\[data-value="positive"\]）
+  * 找到对应的按钮（例如，.fact button[data-value="positive"]）
   * 并给它添加 `active` 和对应的评价类 ('positive' 或 'negative')。  
   * 此函数不直接返回值，其效果是修改 DOM 中按钮的样式。
 
@@ -865,7 +867,7 @@ function refreshVoteStatus(new_vote) {...
 function animateCountUpdate(span, newValue) {...
 }
 ```
-* **功能:** 平滑地更新页面上某个 \<span\> 元素显示的数字
+* **功能:** 平滑地更新页面上某个 <span> 元素显示的数字
 * 并添加一个短暂的动画效果（通过 CSS 类）。  
 * **数据接收:** 接收两个参数：span (需要更新的 DOM 元素) 和 newValue (要显示的新数值)。  
 * **数据处理/返回:**  
@@ -881,7 +883,7 @@ function updateStatsDisplay(stats) {...
 ```
 * **功能:** 接收包含所有维度统计数据的对象
 * 并调用 `animateCountUpdate` 来更新页面上显示的各个统计数字（正面评价数和负面评价数)
-* 此函数不直接返回值，其效果是通过调用 `animateCountUpdate` 来修改 DOM 中多个统计数字 \<span\> 的显示。
+* 此函数不直接返回值，其效果是通过调用 `animateCountUpdate` 来修改 DOM 中多个统计数字 <span> 的显示。
   
 
 
@@ -976,10 +978,10 @@ function updateStatsDisplay(stats) {...
 ## **4. 数据库迁移**
 
 在修改 models.py 后，需要运行以下命令来更新数据库结构：
-
+```
 python manage.py makemigrations your_app_name  
 python manage.py migrate
-
+```
 ## **5. 部署与配置**
 
 * 确保 Django 项目正确配置了数据库。  
