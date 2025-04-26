@@ -2,13 +2,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import get_user_model
 from .models import Document, Vote_Document
 from django.db import transaction
-from django.db import models
-from django.contrib.auth import authenticate, login
-from django.shortcuts import  redirect
-from django.contrib.auth.forms import AuthenticationForm
 
 def document_detail(request, doc_id):
     document = get_object_or_404(Document, id=doc_id)
@@ -22,7 +17,9 @@ def document_detail(request, doc_id):
         'document': document,
         'user_vote': user_vote
     })
-# views.py
+
+
+    
 @require_http_methods(["POST"])
 @transaction.atomic
 def submit_rating(request, doc_id):

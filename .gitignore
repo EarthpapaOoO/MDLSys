@@ -1,0 +1,5 @@
+# 忽略 db.sqlite 文件
+db.sqlite
+
+# 忽略所有 .pyc 文件
+*.pyc
