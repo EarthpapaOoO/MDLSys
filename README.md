@@ -726,8 +726,8 @@ document.addEventListener('DOMContentLoaded', function() {...
   const voteSubmittedInput = document.getElementById('vote-submitted');
   ```
  **数据接收:**  
-  * 读取 DOM 元素：获取表单 (\#rating-form)、提交按钮 (button\[type="submit"\])、隐藏的投票状态输入框 (\#vote-submitted) 以及所有评分按钮 (.rating-column button)。  
-  * 读取初始状态：从 \#vote-submitted 输入框读取用户是否已提交过投票 ('true' 或 'false')。  
+  * 读取 DOM 元素：获取表单 (#rating-form)、提交按钮 (button[type="submit"])、隐藏的投票状态输入框 (#vote-submitted) 以及所有评分按钮 (.rating-column button)。  
+  * 读取初始状态：从 #vote-submitted 输入框读取用户是否已提交过投票 ('true' 或 'false')。  
 
 
   ```javascript
@@ -758,10 +758,10 @@ if (btn.classList.contains('active')) {
             const dim = this.dataset.dimension;
             const val = this.dataset.value;
 ```
-* **功能:** 当用户点击某个评分按钮（例如，“事实 \- 正面”按钮）时触发
+* **功能:** 当用户点击某个评分按钮（例如，“事实 - 正面”按钮）时触发
 * 它负责更新按钮的视觉高亮状态，记录用户的选择，并重置提交按钮的状态，允许用户提交或修改评价。  
 * **数据接收:**  
-  * 从被点击按钮的 dataset 属性中读取维度 (dimension) 和评价值 (value, 即 'positive' 或 'negative')。  
+  * 从被点击按钮的 `dataset` 属性中读取维度 `(dimension)` 和评价值 (value, 即 'positive' 或 'negative')。  
 
 
 ```javascript
@@ -774,9 +774,9 @@ if (btn.classList.contains('active')) {
             selected[dim] = val;
 ```
 **数据处理/返回:**  
-  * 更新 DOM：移除同维度下所有按钮的高亮类 (active, positive, negative)，
-  * 然后给被点击的按钮添加 active 和对应的评价类 (positive 或 negative)。  
-  * 更新 selected JavaScript 对象：将当前维度 (dim) 的值更新为用户新选择的值 (val)。  
+  * 更新 DOM：移除同维度下所有按钮的高亮类` (active, positive, negative)`，
+  * 然后给被点击的按钮添加 `active` 和对应的评价类 `(positive 或 negative)`。  
+  * 更新 `selected JavaScript` 对象：将当前维度 `(dim)` 的值更新为用户新选择的值 (val)。  
 
 
 ```javascript
@@ -809,14 +809,14 @@ if (['fact','style','background'].some(dim => !selected[dim])) {
                 body: payload
             });
 ```
-  * **准备发送数据:** 创建一个 URLSearchParams 对象 (payload)
-  * 包含 CSRF 令牌和 selected 对象中的所有评价数据（fact, style, background 及其对应的值 'positive'/'negative'）。  
-  * **发送数据 (异步请求):** 使用 Workspace API 向表单的 action URL 发送一个 POST 请求
-  * 请求头设置为 application/x-www-form-urlencoded，请求体为 payload。  
-  * **接收服务器响应:** await 等待服务器返回响应
-  * 并使用 resp.json() 解析返回的 JSON 数据 (result)
-  * 预期 result 包含 success (布尔值), stats (包含各维度统计数据的对象),
-  * new_vote (包含刚提交的投票详情的对象), 可能还有 error (字符串)
+  * **准备发送数据:** 创建一个 URLSearchParams 对象` (payload)`
+  * 包含 `CSRF` 令牌和 `selected` 对象中的所有评价数据（`fact`, `style`, `background` 及其对应的值 'positive'/'negative'）。  
+  * **发送数据 (异步请求):** 使用 Workspace API 向表单的` action URL `发送一个 POST 请求
+  * 请求头设置为 application/x-www-form-urlencoded，请求体为 `payload`。  
+  * **接收服务器响应:** `await` 等待服务器返回响应
+  * 并使用` resp.json() `解析返回的 JSON 数据 `(result)`
+  * 预期 `result` 包含 `success` (布尔值), `stats` (包含各维度统计数据的对象),
+  * `new_vote` (包含刚提交的投票详情的对象), 可能还有 error (字符串)
 
 
 ```javascript
@@ -834,13 +834,13 @@ if (result.success) {
             }
 ```
  **处理响应 (成功):** 如果 result.success 为 true：  
-    * 调用 updateStatsDisplay(result.stats)，将从服务器接收到的最新统计数据 (result.stats) 传递给它，用于更新页面上的统计数字。  
-    * 调用 refreshVoteStatus(result.new\_vote)
-    将从服务器接收到的用户最新投票数据 (result.new\_vote) 传递给它
+    * 调用` updateStatsDisplay(result.stats)`，将从服务器接收到的最新统计数据 `(result.stats)` 传递给它，用于更新页面上的统计数字。  
+    * 调用 `refreshVoteStatus(result.new_vote)`
+    将从服务器接收到的用户最新投票数据 `(result.new_vote)` 传递给它
     用于更新按钮的高亮状态以反映已提交的投票 
     * 更新提交按钮状态为“已提交”并禁用
     * 更新隐藏输入框 \#vote-submitted 的值为 'true'
-  * **处理响应 (失败):** 如果 result.success 为 false 或 Workspace 出错：  
+  * **处理响应 (失败):** 如果 `result.success` 为 `false` 或 `Workspace 出错`：  
     * 显示包含错误信息的 alert (优先使用 result.error，否则显示通用错误信息)
     * 将提交按钮重置回“确认评价”状态并启用
 
@@ -850,14 +850,14 @@ function refreshVoteStatus(new_vote) {...
 }
 ```
  **功能:** 根据传入的最新投票数据，刷新评分按钮的视觉高亮状态，使其准确反映当前已提交的投票。  
-* **数据接收:** 接收一个 new_vote 对象作为参数
+* **数据接收:** 接收一个 `new_vote` 对象作为参数
 * 这个对象通常来自服务器响应，格式类似 { fact: true, style: false, background: true }
 * **数据处理/返回:**  
-  * 清除所有评分按钮的 active, positive, negative 类。  
-  * 遍历 new_vote 对象
-  * 对于每个维度 (dim) 和对应的选择 (choice - true/false)，确定值是 'positive' 还是 'negative'。  
+  * 清除所有评分按钮的 `active`, `positive`, `negative` 类。  
+  * 遍历 `new_vote` 对象
+  * 对于每个维度 (`dim`) 和对应的选择 (choice - true/false)，确定值是 'positive' 还是 'negative'。  
   * 找到对应的按钮（例如，.fact button\[data-value="positive"\]）
-  * 并给它添加 active 和对应的评价类 ('positive' 或 'negative')。  
+  * 并给它添加 `active` 和对应的评价类 ('positive' 或 'negative')。  
   * 此函数不直接返回值，其效果是修改 DOM 中按钮的样式。
 
 
@@ -880,8 +880,8 @@ function updateStatsDisplay(stats) {...
 }
 ```
 * **功能:** 接收包含所有维度统计数据的对象
-* 并调用 animateCountUpdate 来更新页面上显示的各个统计数字（正面评价数和负面评价数)
-* 此函数不直接返回值，其效果是通过调用 animateCountUpdate 来修改 DOM 中多个统计数字 \<span\> 的显示。
+* 并调用 `animateCountUpdate` 来更新页面上显示的各个统计数字（正面评价数和负面评价数)
+* 此函数不直接返回值，其效果是通过调用 `animateCountUpdate` 来修改 DOM 中多个统计数字 \<span\> 的显示。
   
 
 
