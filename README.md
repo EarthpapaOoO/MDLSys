@@ -1,6 +1,12 @@
 # Django 多维度文章评价系统 - 开发文档
 ## 目录
 [概述](#1-概述)
+[功能特性](#2-功能特性)
+[开发环境](#3-开发环境)
+[技术实现](#3-开发环境)
+[数据库迁移](#4-数据库迁移)
+[部署与配置](#5-部署与配置)
+[常见问题排查](#6-常见问题排查)
 ## 1. 概述
 
 本项目旨在为一个 Django 应用添加一个可移植的多用户、多维度文章评价系统。用户可以对系统中的“文档”（例如文章、帖子等）从**事实准确性 (Fact)**、**写作风格 (Style)** 和**背景信息 (Background)** 三个维度进行评价，每个维度都可以选择“积极 (Positive)”或“消极 (Negative)”两种倾向。系统会记录每个用户的具体评价，并实时统计每篇文章在各个维度上的总体评价情况。
@@ -59,7 +65,7 @@ Ubuntu/WSL2
 
 ```
 
-## 3. 技术实现
+## 4. 技术实现
 
 ### 基础配置 Multi_DLsys/settings.py
 
@@ -83,9 +89,9 @@ STATICFILES_DIRS = [APP_DIR / "static"]
 
 ```
 以上配置可以根据需要自己设定,尤其是注意配置中设定的路径已经存在
-### 3.1 后端 (Django)
+### 4.1 后端 (Django)
 
-#### 3.1.1 数据模型 (Models)
+#### 4.1.1 数据模型 (Models)
 
 **a) 导入和User路径**
 
@@ -307,7 +313,7 @@ class Meta:
 
 
 
-#### **3.1.2 视图逻辑 (Views)**
+#### **4.1.2 视图逻辑 (Views)**
 
 **a) 显示文档及评价状态 (document_detail)**
 
@@ -450,7 +456,7 @@ def submit_rating(request, doc_id):
 
 
 
-#### **3.1.3 URL 配置 (urls.py)**
+#### **4.1.3 URL 配置 (urls.py)**
 
 需要为上述视图配置 URL。
 ##### 项目级urls.py
@@ -499,9 +505,9 @@ urlpatterns = [
 
 
 
-### **3.2 前端 (HTML, CSS, JavaScript)**
+### **4.2 前端 (HTML, CSS, JavaScript)**
 
-#### **3.2.1 HTML 模板结构 (templates/documents/detail.html)**
+#### **4.2.1 HTML 模板结构 (templates/documents/detail.html)**
 
 ```html
 <!DOCTYPE html>
@@ -587,7 +593,7 @@ urlpatterns = [
 * `rating-message`: 用于显示 AJAX 提交后的反馈信息。  
 * `stats-display`: 用于显示和更新统计数据。
 
-#### **3.2.2 JavaScript 交互逻辑 (static/js/rating_script.js)**
+#### **4.2.2 JavaScript 交互逻辑 (static/js/rating_script.js)**
 
 
 ```javascript
@@ -892,7 +898,7 @@ function updateStatsDisplay(stats) {...
 
 
 
-#### **3.2.3 CSS 样式设计 (static/css/rating_styles.css)**
+#### **4.2.3 CSS 样式设计 (static/css/rating_styles.css)**
 
 将 HTML 中 <style> 标签内的 CSS 规则移到这个单独的文件中，或者根据需要进行扩展和美化。
 ```css
