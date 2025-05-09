@@ -25,9 +25,9 @@ def document_detail(request, doc_id):
 def submit_rating(request, doc_id):
     document = get_object_or_404(Document, id=doc_id)
     if not request.user.is_authenticated:
-        return JsonResponse({'error': '请先登录'}, status=403)
+        return JsonResponse({'error': 'please login first'}, status=403)
 
-    # 参数解析（允许空值处理）
+    # parase choice
     def parse_choice(value):
         return {'positive': True, 'negative': False}.get(value, None)
     
@@ -37,11 +37,11 @@ def submit_rating(request, doc_id):
         'background': request.POST.get('background')
     }
 
-    # 验证必须完成所有选择
+    # verify all choices are present
     if any(v is None for v in data.values()):
-        return JsonResponse({'error': '请完成所有维度的评价'}, status=400)
+        return JsonResponse({'error': 'please finish all evaluation'}, status=400)
 
-    # 获取或创建评价记录
+    # get or create vote
     vote, created = Vote_Document.objects.update_or_create(
         user=request.user,
         document=document,
@@ -71,9 +71,9 @@ def submit_rating(request, doc_id):
     return JsonResponse({
         'success': True,
         'stats':stats,
-        'new_vote': {  # 新增当前用户的最新选择
+        'new_vote': {  
             'fact': vote.fact_choice,
             'style': vote.style_choice,
             'background': vote.background_choice
             } 
- })  # 统计更新交给信号处理
+ }) 

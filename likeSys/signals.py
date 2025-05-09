@@ -5,13 +5,10 @@ from django.db import transaction
 from django.db.models import F
 from .models import Vote_Document
 
-""""这段代码是Django信号处理程序，
-主要功能是实现文档评价统计的原子化更新。
-当Vote_Document模型发生保存操作时，
-自动更新关联Document模型的统计字段"""
+
 @receiver(post_save, sender=Vote_Document)
 def handle_vote_change(sender, instance, created, **kwargs):
-    """修正后的信号处理"""
+
     
     def _update():
         doc = instance.document

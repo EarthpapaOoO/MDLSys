@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 from django.conf import settings
 def user_directory_path(instance, filename):
-    # 文件将上传到 MEDIA_ROOT/user_<id>/<filename>
     return f'user_{instance.user.id}/{filename}'
 
 
@@ -55,8 +54,7 @@ class Vote_Document(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        """ 保存前记录旧值 """
-        if self.pk:  # 仅限更新操作
+        if self.pk:  
             old_instance = Vote_Document.objects.get(pk=self.pk)
             self._old_values = {
                 'fact': old_instance.fact_choice,
@@ -66,7 +64,7 @@ class Vote_Document(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ('user', 'document')  # 确保唯一评价
+        unique_together = ('user', 'document')  # only constrain one vote per user per document
 
     def __str__(self):
         return f"Vote by {self.user.username} on {self.document.name}"

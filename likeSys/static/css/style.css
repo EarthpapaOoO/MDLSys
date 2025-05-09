@@ -3,14 +3,12 @@
     margin: 20px auto;
 }
 
-/* 横向排列三列 */
 .rating-columns {
     display: flex;
     justify-content: space-between;
     gap: 2%;
 }
 
-/* 每列宽度均等 */
 .rating-column {
     width: 32%;
     box-sizing: border-box;
@@ -27,12 +25,10 @@
     transition: all 0.3s;
 }
 
-/* 默认颜色 */
 .fact .btn { background-color: #e0f2e9; }
 .style .btn { background-color: #e0f0ff; }
 .background .btn { background-color: #e8e0ff; }
 
-/* 选中状态 */
 .btn.active.positive { background-color: #2ecc71 !important; }
 .fact .btn.active.positive { background-color: #27ae60; }
 .style .btn.active.positive { background-color: #2980b9; }
@@ -42,7 +38,6 @@
     background-color: #e74c3c !important;
 }
 
-/* 提交按钮 */
 .submit-btn-wrapper {
     width: 32%;
     margin: 20px auto 0;
