@@ -1,30 +1,51 @@
+/* === 基础布局 === */
 .rating-container {
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 90vw;
+    margin: 3vh auto;
+    padding: 2vh 2vw;
 }
 
+/* 使用 Grid 替代 Flex 实现三列布局 */
 .rating-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 2vw;
+    justify-items: stretch;
+    align-items: stretch;
+}
+
+.rating-column, .submit-btn-wrapper {
     display: flex;
-    justify-content: space-between;
-    gap: 2%;
-}
-
-.rating-column {
-    width: 32%;
+    flex-direction: column;
+    justify-content: stretch;
+    min-height: 100px;
     box-sizing: border-box;
+    width: 100%;
 }
 
+/* 按钮样式 */
 .btn {
     display: block;
     width: 100%;
-    padding: 20px;
-    margin: 10px 0;
+    padding: 3vh;
+    margin: 2vh 0;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 1.2rem;
     transition: all 0.3s;
+
+    flex:1;
+    white-space: normal;         /* ✅ 允许换行 */
+    overflow-wrap: break-word;   /* ✅ 单词换行 */
+    word-break: break-word;
+    text-overflow: unset;
+    height: 100%;                /* ✅ 自动适应内容高度 */
+    line-height: 1.4;
 }
 
+/* 各维度颜色 */
 .fact .btn { background-color: #e0f2e9; }
 .style .btn { background-color: #e0f0ff; }
 .background .btn { background-color: #e8e0ff; }
@@ -38,39 +59,47 @@
     background-color: #e74c3c !important;
 }
 
-.submit-btn-wrapper {
-    width: 32%;
-    margin: 20px auto 0;
-}
-
-.submit-btn {
-    display: block;
-    width: 100%;
-    padding: 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
 .btn.cancelled {
     background-color: #f0f0f0 !important;
     color: #666;
 }
 
+/* 提交按钮样式 */
+.submit-btn-wrapper {
+    grid-column: span 1;
+    margin: 4vh auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 3vh;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    margin: 0 auto;
+}
+
+/* 用户信息浮动块 */
 .user-info {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 15px;
+    position: absolute;
+    top: 1vh;
+    right: 2vw;
+    padding: 1vh 2vw;
     background: #f8f9fa;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0.3vh 0.6vh rgba(0,0,0,0.1);
+    z-index: 10;
 }
 
 .user-info a {
-    margin-left: 10px;
+    margin-left: 1vw;
     color: #007bff;
 }
 
@@ -82,4 +111,34 @@
 .count-updated {
     transform: scale(1.2);
     color: #3498db;
+}
+
+/* === 响应式布局：保持三列，自动适应内容 === */
+@media (max-width: 768px) {
+    .rating-columns {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .btn {
+        font-size: 0.95rem;
+        padding: 0.8em;
+    }
+
+    .submit-btn-wrapper {
+        grid-column: span 3; /* 占据整行 */
+        margin-top: 3vh;
+    }
+
+    .submit-btn {
+        width: 100%;
+        max-width: 350px;
+        font-size: 1.1rem;
+    }
+
+    .user-info {
+        position: static;
+        margin: 10px auto;
+        text-align: center;
+    }
 }
