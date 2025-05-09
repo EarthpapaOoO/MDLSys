@@ -1,12 +1,19 @@
 .rating-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
 }
 
+/* 横向排列三列 */
+.rating-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 2%;
+}
+
+/* 每列宽度均等 */
 .rating-column {
-    display: inline-block;
-    width: 30%;
-    margin: 0 1%;
+    width: 32%;
+    box-sizing: border-box;
 }
 
 .btn {
@@ -26,31 +33,37 @@
 .background .btn { background-color: #e8e0ff; }
 
 /* 选中状态 */
-.btn.active.positive {
-    background-color: #2ecc71 !important; /* 绿色 */
-}
+.btn.active.positive { background-color: #2ecc71 !important; }
 .fact .btn.active.positive { background-color: #27ae60; }
 .style .btn.active.positive { background-color: #2980b9; }
 .background .btn.active.positive { background-color: #8e44ad; }
 
 .btn.active.negative {
-    background-color: #e74c3c !important; /* 红色 */
+    background-color: #e74c3c !important;
+}
+
+/* 提交按钮 */
+.submit-btn-wrapper {
+    width: 32%;
+    margin: 20px auto 0;
 }
 
 .submit-btn {
     display: block;
-    width: 200px;
-    margin: 20px auto;
+    width: 100%;
     padding: 20px;
     background-color: #3498db;
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: 16px;
 }
+
 .btn.cancelled {
     background-color: #f0f0f0 !important;
     color: #666;
 }
+
 .user-info {
     position: fixed;
     top: 20px;
@@ -65,6 +78,7 @@
     margin-left: 10px;
     color: #007bff;
 }
+
 .count {
     transition: all 0.3s ease;
     display: inline-block;
@@ -74,4 +88,3 @@
     transform: scale(1.2);
     color: #3498db;
 }
-

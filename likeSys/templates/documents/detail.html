@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,12 +6,11 @@
 </head>
 <body>
     <h1>{{ document.name }}</h1>
-    
-     <div class="user-info">
+
+    <div class="user-info">
         {% if user.is_authenticated %}
             欢迎，{{ user.username }}！
         {% else %}
-             <!-- <a href="{% url 'login' %}">游客登录</a> -->
             游客登录
         {% endif %}
     </div>
@@ -20,55 +18,55 @@
     <div class="rating-container">
         <form id="rating-form" method="post" action="{% url 'submit_rating' document.id %}">
             {% csrf_token %}
-             <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
+            <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
 
-            <div class="rating-column fact">
-                <button type="button" data-dimension="fact" data-value="positive"
-                    class="btn {% if user_vote and user_vote.fact_choice %}active positive{% endif %}">✓ 事实积极</button>
-                         <div class="stats">
-                                <span class="positive-count">{{ document.fact_positive }}</span>
-                         </div>
-                <button type="button" data-dimension="fact" data-value="negative"
-                    class="btn {% if user_vote and not user_vote.fact_choice %}active negative{% endif %}">✗ 事实消极</button>
-                        <div class="stats">
-                                <span class="negative-count">{{ document.fact_negative }}</span>
-                        </div>
-            </div>
-            
-            
-         <div class="rating-column style">
-            <button type="button" data-dimension="style" data-value="positive"
-                class="btn {% if user_vote and user_vote.style_choice %}active positive{% endif %}">✓ 文风积极</button>
-            <div class="stats">
-                <span class="positive-count">{{ document.style_positive }}</span>
-            </div>
-            <button type="button" data-dimension="style" data-value="negative"
-                class="btn {% if user_vote and not user_vote.style_choice %}active negative{% endif %}">✗ 文风消极</button>
-            <div class="stats">
-                <span class="negative-count">{{ document.style_negative }}</span>
-            </div>
-        </div>
+            <div class="rating-columns">
+                <div class="rating-column fact">
+                    <button type="button" data-dimension="fact" data-value="positive"
+                        class="btn {% if user_vote and user_vote.fact_choice %}active positive{% endif %}">✓ 事实积极</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.fact_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="fact" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.fact_choice %}active negative{% endif %}">✗ 事实消极</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.fact_negative }}</span>
+                    </div>
+                </div>
 
+                <div class="rating-column style">
+                    <button type="button" data-dimension="style" data-value="positive"
+                        class="btn {% if user_vote and user_vote.style_choice %}active positive{% endif %}">✓ 文风积极</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.style_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="style" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.style_choice %}active negative{% endif %}">✗ 文风消极</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.style_negative }}</span>
+                    </div>
+                </div>
 
+                <div class="rating-column background">
+                    <button type="button" data-dimension="background" data-value="positive"
+                        class="btn {% if user_vote and user_vote.background_choice %}active positive{% endif %}">✓ 背景积极</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.background_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="background" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.background_choice %}active negative{% endif %}">✗ 背景消极</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.background_negative }}</span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="rating-column background">
-            <button type="button" data-dimension="background" data-value="positive"
-                class="btn {% if user_vote and user_vote.background_choice %}active positive{% endif %}">✓ 背景积极</button>
-            <div class="stats">
-                <span class="positive-count">{{ document.background_positive }}</span>
+            <div class="submit-btn-wrapper">
+                <button type="submit" class="submit-btn">确认评价</button>
             </div>
-            <button type="button" data-dimension="background" data-value="negative"
-                class="btn {% if user_vote and not user_vote.background_choice %}active negative{% endif %}">✗ 背景消极</button>
-            <div class="stats">
-                <span class="negative-count">{{ document.background_negative }}</span>
-            </div>
-        </div>
-            
-            <button type="submit" class="submit-btn">确认评价</button>
         </form>
     </div>
-<!-- js here -->
- 
+
     <script src="/static/js/script.js"></script>
 </body>
 </html>

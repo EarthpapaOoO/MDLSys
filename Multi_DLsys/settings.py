@@ -22,6 +22,7 @@ APP_DIR = BASE_DIR / "likeSys"
 #URL
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
+    # TARGET_URL = ''
 
 #others
 MEDIA_ROOT = APP_DIR / 'media'
