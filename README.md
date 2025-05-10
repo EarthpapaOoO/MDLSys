@@ -514,75 +514,78 @@ urlpatterns = [
 <html>
 <head>
     <title>文档评价</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <h1>{{ document.name }}</h1>
-    
-     <div class="user-info">
+
+    <div class="user-info">
         {% if user.is_authenticated %}
-            欢迎，{{ user.username }}！
+            Welcome，{{ user.username }}！
         {% else %}
-             <!-- <a href="{% url 'login' %}">游客登录</a> -->
-            游客登录
+            Visitor
         {% endif %}
     </div>
 
     <div class="rating-container">
-        <form id="rating-form" method="post" action="{% url 'submit_rating' document.id %}">
+        <form id="rating-form" method="post" action="{{TARGET_URL}}{% url 'submit_rating' document.id %}">
             {% csrf_token %}
-             <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
+            <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
 
-            <div class="rating-column fact">
-                <button type="button" data-dimension="fact" data-value="positive"
-                    class="btn {% if user_vote and user_vote.fact_choice %}active positive{% endif %}">✓ 事实积极</button>
-                         <div class="stats">
-                                <span class="positive-count">{{ document.fact_positive }}</span>
-                         </div>
-                <button type="button" data-dimension="fact" data-value="negative"
-                    class="btn {% if user_vote and not user_vote.fact_choice %}active negative{% endif %}">✗ 事实消极</button>
-                        <div class="stats">
-                                <span class="negative-count">{{ document.fact_negative }}</span>
-                        </div>
-            </div>
-            
-            
-         <div class="rating-column style">
-            <button type="button" data-dimension="style" data-value="positive"
-                class="btn {% if user_vote and user_vote.style_choice %}active positive{% endif %}">✓ 文风积极</button>
-            <div class="stats">
-                <span class="positive-count">{{ document.style_positive }}</span>
-            </div>
-            <button type="button" data-dimension="style" data-value="negative"
-                class="btn {% if user_vote and not user_vote.style_choice %}active negative{% endif %}">✗ 文风消极</button>
-            <div class="stats">
-                <span class="negative-count">{{ document.style_negative }}</span>
-            </div>
-        </div>
+            <div class="rating-columns">
+                <div class="rating-column fact">
+                    <button type="button" data-dimension="fact" data-value="positive"
+                        class="btn {% if user_vote and user_vote.fact_choice %}active positive{% endif %}">✓ fact_positive</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.fact_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="fact" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.fact_choice %}active negative{% endif %}">✗ fact_negative</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.fact_negative }}</span>
+                    </div>
+                </div>
 
+                <div class="rating-column style">
+                    <button type="button" data-dimension="style" data-value="positive"
+                        class="btn {% if user_vote and user_vote.style_choice %}active positive{% endif %}">✓ style_positive</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.style_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="style" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.style_choice %}active negative{% endif %}">✗ style_negative</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.style_negative }}</span>
+                    </div>
+                </div>
 
+                <div class="rating-column background">
+                    <button type="button" data-dimension="background" data-value="positive"
+                        class="btn {% if user_vote and user_vote.background_choice %}active positive{% endif %}">✓ background_positive</button>
+                    <div class="stats">
+                        <span class="positive-count">{{ document.background_positive }}</span>
+                    </div>
+                    <button type="button" data-dimension="background" data-value="negative"
+                        class="btn {% if user_vote and not user_vote.background_choice %}active negative{% endif %}">✗ background_negative</button>
+                    <div class="stats">
+                        <span class="negative-count">{{ document.background_negative }}</span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="rating-column background">
-            <button type="button" data-dimension="background" data-value="positive"
-                class="btn {% if user_vote and user_vote.background_choice %}active positive{% endif %}">✓ 背景积极</button>
-            <div class="stats">
-                <span class="positive-count">{{ document.background_positive }}</span>
+            <div class="submit-btn-wrapper">
+                <button type="submit" class="submit-btn">confirm</button>
             </div>
-            <button type="button" data-dimension="background" data-value="negative"
-                class="btn {% if user_vote and not user_vote.background_choice %}active negative{% endif %}">✗ 背景消极</button>
-            <div class="stats">
-                <span class="negative-count">{{ document.background_negative }}</span>
-            </div>
-        </div>
-            
-            <button type="submit" class="submit-btn">确认评价</button>
         </form>
     </div>
-<!-- js here -->
- 
+<script>
+    const TARGET_URL = "{{ TARGET_URL }}";
+</script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>
+
 
 ```
 * `{% csrf_token %}`: 必须包含，用于 Django 的 `CSRF` 保护。  
@@ -592,7 +595,7 @@ urlpatterns = [
 * `submit-rating-btn`: 提交按钮，初始时禁用。  
 * `rating-message`: 用于显示 AJAX 提交后的反馈信息。  
 * `stats-display`: 用于显示和更新统计数据。
-
+* `TARGET_URL`:在模板中使用` {{ BASE_URL }} `动态插入正确的 URL 前缀
 #### **4.2.2 JavaScript 交互逻辑 (static/js/rating_script.js)**
 
 
@@ -659,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 csrfmiddlewaretoken: form.querySelector('[name=csrfmiddlewaretoken]').value,
                 ...selected
             });
-            const resp = await fetch(form.action, {
+            const resp = await fetch(TARGET_URL+form.action, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: payload
@@ -812,7 +815,7 @@ if (['fact','style','background'].some(dim => !selected[dim])) {
                 csrfmiddlewaretoken: form.querySelector('[name=csrfmiddlewaretoken]').value,
                 ...selected
             });
-            const resp = await fetch(form.action, {
+            const resp = await fetch(TARGET+form.action, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: payload
@@ -821,7 +824,8 @@ if (['fact','style','background'].some(dim => !selected[dim])) {
   * **准备发送数据:** 创建一个 URLSearchParams 对象` (payload)`
   * 包含 `CSRF` 令牌和 `selected` 对象中的所有评价数据（`fact`, `style`, `background` 及其对应的值 'positive'/'negative'）。  
   * **发送数据 (异步请求):** 使用 Workspace API 向表单的` action URL `发送一个 POST 请求
-  * 请求头设置为 application/x-www-form-urlencoded，请求体为 `payload`。  
+  * 请求头设置为 application/x-www-form-urlencoded，请求体为 `payload`。
+  * `TARGET+form.action `利用该变量拼接请求路径。 
   * **接收服务器响应:** `await` 等待服务器返回响应
   * 并使用` resp.json() `解析返回的 JSON 数据 `(result)`
   * 预期 `result` 包含 `success` (布尔值), `stats` (包含各维度统计数据的对象),
@@ -992,7 +996,7 @@ python manage.py migrate
 ## **5. 部署与配置**
 
 * 确保 Django 项目正确配置了数据库。  
-* 确保 settings.AUTH_USER_MODEL 指向正确的用户模型。  
+* 确保 settings.AUTH_USER_MODEL 指向正确的用户模型。      
 * 确保静态文件 (rating_styles.css, rating_script.js) 正确收集和提供服务。  
 * 在生产环境中，考虑使用更健壮的 Web 服务器（如 Nginx + Gunicorn/uWSGI）。
 
@@ -1003,4 +1007,7 @@ python manage.py migrate
 | 提交评价按钮点击无反应 | JS 脚本未正确加载或发生报错 | 检查浏览器 Console，有无 404 错误或 JavaScript 报错 |
 | 上传的文档不显示 | `MEDIA_URL` 未正确处理 | 检查项目级 `urls.py` 是否添加了 `urlpatterns += static(...)` |
 | 投票无法保存 | CSRF 验证失败或表单字段异常 | 确保表单中有 `{% csrf_token %}`，并检查前端提交数据格式 |
+| 静态文件加载错误（部署后） | Nginx 未正确挂载 `TARGET_URL`，请求未通过代理 | 检查 Nginx 配置中 `/static/` 映射，确认静态资源请求未误走 Django |
+| 表单提交显示 "Network Error" | `fetch` 请求的 URL 路径错误，请求未到达 Django 后端 | 检查 JS 中 `submit` 函数是否使用了完整路径，可使用浏览器开发者工具调试 |
+
 
