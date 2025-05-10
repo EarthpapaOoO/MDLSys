@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>文档评价</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <h1>{{ document.name }}</h1>
@@ -16,7 +17,7 @@
     </div>
 
     <div class="rating-container">
-        <form id="rating-form" method="post" action="{% url 'submit_rating' document.id %}">
+        <form id="rating-form" method="post" action="{{TARGET_URL}}{% url 'submit_rating' document.id %}">
             {% csrf_token %}
             <input type="hidden" id="vote-submitted" value="{% if user_vote %}true{% else %}false{% endif %}">
 
@@ -66,7 +67,9 @@
             </div>
         </form>
     </div>
-
+<script>
+    const TARGET_URL = "{{ TARGET_URL }}";
+</script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 csrfmiddlewaretoken: form.querySelector('[name=csrfmiddlewaretoken]').value,
                 ...selected
             });
-            const resp = await fetch(TARGET_URL+form.action, {
+            const resp = await fetch(form.action, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: payload
