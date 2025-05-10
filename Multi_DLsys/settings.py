@@ -20,19 +20,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APP_DIR = BASE_DIR / "likeSys"
 
 #URL
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-    # TARGET_URL = ''
+TARGET_URL = '/Django/'
 
 #others
 MEDIA_ROOT = APP_DIR / 'media'
 STATICFILES_DIRS = [APP_DIR / "static"]
-
+STATIC_ROOT = APP_DIR / "staticfiles"
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#k3^pf(x*o41avk7u6&#wz7^bp+i54bcurjm-aaq!loicm0w0n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'likeSys.context_processors.target_url',
             ],
         },
     },
