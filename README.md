@@ -23,7 +23,7 @@
 Ubuntu/WSL2
 示例Django项目所用版本为4.2.11
 `python -m pip install django==5.2`
-
+Nginx挂载Django
 
 # 项目目录(以本项目为例)
 ```
@@ -67,7 +67,8 @@ Ubuntu/WSL2
 
 ## 4. 技术实现
 
-### 基础配置 Multi_DLsys/settings.py
+### 基础配置 
+#### Multi_DLsys/settings.py
 
 ```python
 #设置项目根目录变量
@@ -79,13 +80,54 @@ APP_DIR = BASE_DIR / "likeSys"
 
 #静态文件和媒体文件的URL前缀
 #URL
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-
+TARGET_URL = '/Django/'#挂载在Nginx的 `servername/Django/` 实现反向代理
 #媒体文件和静态文件的本地存储路径
 #others
 MEDIA_ROOT = APP_DIR / 'media'
 STATICFILES_DIRS = [APP_DIR / "static"]
+STATIC_ROOT = APP_DIR / "staticfiles"
+
+```
+
+#### Nginx配置示例
+###### nginx.conf
+```nginx
+events {}
+
+http{
+    include mime.types;
+    include ./conf.d/*.conf;
+}
+
+```
+
+###### conf.d/base.conf
+
+```nginx
+
+server{
+    listen 80;
+    server_name localhost;#your domain
+    
+    root /var/www/html/;
+    location / {
+        index base.html;
+    }
+
+     location /static/ {
+        alias /srv/Multi_dimensionLikes/likeSys/staticfiles/;
+    }
+
+    location /Django/{
+        proxy_pass http://0.0.0.0:8000/;  # 指向 Django 服务地址
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme; 
+    }
+}
 
 ```
 以上配置可以根据需要自己设定,尤其是注意配置中设定的路径已经存在
